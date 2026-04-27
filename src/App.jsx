@@ -146,7 +146,7 @@ function GaborTile({ patch, state, onPressStart, canvasRef }) {
       type="button"
       onTouchStart={onPressStart}
       onMouseDown={onPressStart}
-      className={`flex h-full w-full min-h-0 touch-manipulation select-none items-center justify-center border p-2 transition duration-200 ${stateClasses[state]}`}
+      className={`flex h-full w-full min-h-0 touch-manipulation select-none items-center justify-center border p-2 ${stateClasses[state]}`}
       aria-label="Select patch"
     >
       <div className="flex h-full w-full items-center justify-center p-1">
