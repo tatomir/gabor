@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#686868"/>
+  <defs>
+    <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#a3a3a3"/>
+      <stop offset="50%" stop-color="#111111"/>
+      <stop offset="100%" stop-color="#f3f3f3"/>
+    </linearGradient>
+  </defs>
+  <g filter="url(#blur)" opacity="0.95">
+    <ellipse cx="256" cy="176" rx="110" ry="26" fill="url(#band)"/>
+    <ellipse cx="256" cy="256" rx="128" ry="28" fill="url(#band)"/>
+    <ellipse cx="256" cy="336" rx="112" ry="26" fill="url(#band)"/>
+  </g>
+</svg>

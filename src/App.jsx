@@ -7,7 +7,7 @@ const ERROR_FLASH_MS = 300;
 const SUCCESS_HOLD_MS = 140;
 const SESSION_LENGTH_MS = 60_000;
 const DEFAULT_START_TEXT = 'Loading a current news brief for this day. Please wait a moment.';
-const BACKGROUND_LEVEL = 142;
+const BACKGROUND_LEVEL = 104;
 const PREVIEW_FRAME_MS = 1000;
 
 function randomFromRange(min, max) {
@@ -135,7 +135,7 @@ function GaborTile({ patch, state, onClick, canvasRef }) {
   }, [canvasRef, patch]);
 
   const stateClasses = {
-    idle: 'border-transparent hover:border-neutral-300/25',
+    idle: 'border-transparent',
     selected: 'border-neutral-950/20',
     success: 'border-emerald-500/45',
     error: 'border-rose-500/45',
@@ -266,6 +266,13 @@ export default function App() {
     setRound(createRound());
   }
 
+  function completeRoundAndAdvance() {
+    setSelectedIds([]);
+    setFeedback('idle');
+    setRound(createRound());
+    resetTimerRef.current = null;
+  }
+
   function prefetchStartText() {
     fetchDailyNewsText()
       .then((text) => {
@@ -344,7 +351,7 @@ export default function App() {
           return;
         }
 
-        startNextRound();
+        completeRoundAndAdvance();
       }, SUCCESS_HOLD_MS);
       return;
     }
@@ -381,7 +388,7 @@ export default function App() {
   return (
     <main
       className={`h-screen overflow-hidden p-3 text-neutral-900 ${
-        screen === 'text' ? 'bg-white' : 'bg-[#8e8e8e]'
+        screen === 'text' ? 'bg-white' : 'bg-[#686868]'
       }`}
       onClick={screen === 'game' ? undefined : advanceScreen}
     >
