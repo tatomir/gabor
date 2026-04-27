@@ -144,7 +144,7 @@ function GaborTile({ patch, state, onPress, canvasRef }) {
   return (
     <button
       type="button"
-      onPointerUp={onPress}
+      onPointerDown={onPress}
       className={`flex h-full w-full min-h-0 touch-manipulation select-none items-center justify-center border p-2 transition duration-200 ${stateClasses[state]}`}
       aria-label="Select patch"
     >
@@ -391,7 +391,7 @@ export default function App() {
       className={`h-screen overflow-hidden p-3 text-neutral-900 touch-manipulation select-none ${
         screen === 'text' ? 'bg-white' : 'bg-[#686868]'
       }`}
-      onPointerUp={screen === 'game' ? undefined : advanceScreen}
+      onPointerDown={screen === 'game' ? undefined : advanceScreen}
     >
       {screen === 'preview' ? (
         <section className="grid h-full place-items-center">
