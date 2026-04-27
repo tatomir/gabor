@@ -13,4 +13,29 @@ body,
 
 body {
   margin: 0;
+  overscroll-behavior: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+canvas,
+button,
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+button,
+p,
+canvas {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+button {
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+}
+
+canvas {
+  pointer-events: none;
 }

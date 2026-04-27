@@ -129,7 +129,7 @@ function createPreviewPatch() {
   };
 }
 
-function GaborTile({ patch, state, onClick, canvasRef }) {
+function GaborTile({ patch, state, onPress, canvasRef }) {
   useEffect(() => {
     drawGaborPatch(canvasRef.current, patch);
   }, [canvasRef, patch]);
@@ -144,13 +144,14 @@ function GaborTile({ patch, state, onClick, canvasRef }) {
   return (
     <button
       type="button"
-      onClick={onClick}
-      className={`flex min-h-0 items-center justify-center border p-2 transition duration-200 ${stateClasses[state]}`}
+      onPointerUp={onPress}
+      className={`flex h-full w-full min-h-0 touch-manipulation select-none items-center justify-center border p-2 transition duration-200 ${stateClasses[state]}`}
       aria-label="Select patch"
     >
       <div className="flex h-full w-full items-center justify-center p-1">
         <canvas
           ref={canvasRef}
+          aria-hidden="true"
           className="block h-[min(calc((100vh-3rem)/2),calc((100vw-3rem)/2))] w-[min(calc((100vh-3rem)/2),calc((100vw-3rem)/2))]"
         />
       </div>
@@ -387,10 +388,10 @@ export default function App() {
 
   return (
     <main
-      className={`h-screen overflow-hidden p-3 text-neutral-900 ${
+      className={`h-screen overflow-hidden p-3 text-neutral-900 touch-manipulation select-none ${
         screen === 'text' ? 'bg-white' : 'bg-[#686868]'
       }`}
-      onClick={screen === 'game' ? undefined : advanceScreen}
+      onPointerUp={screen === 'game' ? undefined : advanceScreen}
     >
       {screen === 'preview' ? (
         <section className="grid h-full place-items-center">
@@ -412,13 +413,14 @@ export default function App() {
       {screen === 'game' ? (
         <section className="grid h-full grid-cols-2 grid-rows-2 gap-3">
           {round.patches.map((patchConfig, index) => (
-            <GaborTile
-              key={patchConfig.id}
-              patch={patchConfig.patch}
-              state={getTileState(patchConfig.id)}
-              onClick={() => handleTileClick(patchConfig.id)}
-              canvasRef={canvasRefs.current[index]}
-            />
+            <div key={patchConfig.id} className="min-h-0">
+              <GaborTile
+                patch={patchConfig.patch}
+                state={getTileState(patchConfig.id)}
+                onPress={() => handleTileClick(patchConfig.id)}
+                canvasRef={canvasRefs.current[index]}
+              />
+            </div>
           ))}
         </section>
       ) : null}
