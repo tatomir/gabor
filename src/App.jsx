@@ -129,7 +129,7 @@ function createPreviewPatch() {
   };
 }
 
-function GaborTile({ patch, state, onPress, canvasRef }) {
+function GaborTile({ patch, state, onPressStart, canvasRef }) {
   useEffect(() => {
     drawGaborPatch(canvasRef.current, patch);
   }, [canvasRef, patch]);
@@ -144,7 +144,8 @@ function GaborTile({ patch, state, onPress, canvasRef }) {
   return (
     <button
       type="button"
-      onPointerDown={onPress}
+      onTouchStart={onPressStart}
+      onMouseDown={onPressStart}
       className={`flex h-full w-full min-h-0 touch-manipulation select-none items-center justify-center border p-2 transition duration-200 ${stateClasses[state]}`}
       aria-label="Select patch"
     >
@@ -172,6 +173,7 @@ export default function App() {
   const audioContextRef = useRef(null);
   const prefetchedStartTextRef = useRef('');
   const previewCanvasRef = useRef(null);
+  const lastTouchStartAtRef = useRef(0);
 
   useEffect(() => {
     fetchDailyNewsText()
@@ -307,6 +309,21 @@ export default function App() {
     }, SESSION_LENGTH_MS);
   }
 
+  function runImmediatePress(event, callback) {
+    if (event.type === 'touchstart') {
+      lastTouchStartAtRef.current = Date.now();
+      event.preventDefault();
+      callback();
+      return;
+    }
+
+    if (event.type === 'mousedown' && Date.now() - lastTouchStartAtRef.current < 700) {
+      return;
+    }
+
+    callback();
+  }
+
   function advanceScreen() {
     if (screen === 'preview') {
       setStartText(prefetchedStartTextRef.current || startText);
@@ -391,7 +408,8 @@ export default function App() {
       className={`h-screen overflow-hidden p-3 text-neutral-900 touch-manipulation select-none ${
         screen === 'text' ? 'bg-white' : 'bg-[#686868]'
       }`}
-      onPointerDown={screen === 'game' ? undefined : advanceScreen}
+      onTouchStart={screen === 'game' ? undefined : (event) => runImmediatePress(event, advanceScreen)}
+      onMouseDown={screen === 'game' ? undefined : (event) => runImmediatePress(event, advanceScreen)}
     >
       {screen === 'preview' ? (
         <section className="grid h-full place-items-center">
@@ -417,7 +435,9 @@ export default function App() {
               <GaborTile
                 patch={patchConfig.patch}
                 state={getTileState(patchConfig.id)}
-                onPress={() => handleTileClick(patchConfig.id)}
+                onPressStart={(event) =>
+                  runImmediatePress(event, () => handleTileClick(patchConfig.id))
+                }
                 canvasRef={canvasRefs.current[index]}
               />
             </div>
